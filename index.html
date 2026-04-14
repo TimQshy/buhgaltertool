@@ -725,7 +725,7 @@ function renderResults(d) {
             <td>${pct(d.rates.gnpf)}</td>
             <td>−${fmt(d.gnpfAmount)}</td>
           </tr>
-          ${d.rates.personalDeduction ? \`
+          ${d.rates.personalDeduction ? `
           <tr>
             <td><i>Вычет (Прожиточный минимум)</i></td>
             <td>—</td>
@@ -736,7 +736,7 @@ function renderResults(d) {
             <td>—</td>
             <td style="color: var(--text-muted);">${fmt(d.taxBase)}</td>
           </tr>
-          \` : ''}
+          ` : ''}
           <tr class="row-deduction">
             <td>Подоходный налог (ПН)</td>
             <td>${pct(d.rates.incomeTax)}</td>
@@ -782,7 +782,7 @@ function renderResults(d) {
         </tbody>
       </table>
     </div>
-  \`;
+  `;
 
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
