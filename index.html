@@ -491,13 +491,67 @@
     /* ===== Utility ===== */
     .hidden { display: none !important; }
 
+    /* ===== Instagram floating button ===== */
+    .ig-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 18px 11px 14px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(221, 42, 123, 0.45);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      z-index: 100;
+    }
+
+    .ig-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .ig-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 8px 28px rgba(221, 42, 123, 0.6);
+    }
+
+    .ig-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    @media (max-width: 600px) {
+      .ig-btn span { display: none; }
+      .ig-btn { padding: 13px; border-radius: 50%; bottom: 20px; right: 20px; }
+    }
+
     /* ===== Responsive ===== */
     @media (max-width: 600px) {
+      body { padding: 20px 12px; }
       .form-grid { grid-template-columns: 1fr; }
       .btn-group { grid-column: 1; }
       .header h1 { font-size: 1.4rem; }
-      .card { padding: 20px; }
-      .summary-item .value { font-size: 1.1rem; }
+      .card { padding: 16px; overflow-x: auto; }
+      .summary-item .value { font-size: 1.05rem; }
+      .summary-row { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+      .result-table { font-size: 0.78rem; }
+      .result-table thead th,
+      .result-table tbody td { padding: 8px 8px; }
+      .radio-toggle__option span { padding: 9px 8px; font-size: 0.8rem; }
+      .info-icon:hover::after {
+        white-space: normal;
+        max-width: 180px;
+        left: auto;
+        right: 0;
+        transform: none;
+      }
     }
   </style>
 </head>
@@ -618,13 +672,14 @@
 
   </div>
 
-  <footer style="text-align:center; padding: 24px 0 40px; color: var(--text-muted); font-size: 0.82rem;">
-    <a href="https://www.instagram.com/timqshy/" target="_blank" rel="noopener"
-       style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;"
-       onmouseover="this.style.color='#e1306c'" onmouseout="this.style.color=''">
-      @timqshy
-    </a>
-  </footer>
+  <a href="https://www.instagram.com/timqshy/" target="_blank" rel="noopener" class="ig-btn" aria-label="Instagram @timqshy">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="white" stroke-width="1.8"/>
+      <circle cx="12" cy="12" r="4.2" stroke="white" stroke-width="1.8"/>
+      <circle cx="17.5" cy="6.5" r="1.1" fill="white"/>
+    </svg>
+    <span>@timqshy</span>
+  </a>
 
   <script>
     // ===================================================================
