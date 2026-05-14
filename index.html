@@ -4,891 +4,997 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Калькулятор зарплаты для Кыргызстана — расчёт налогов, взносов и чистой зарплаты">
-  <title>Калькулятор зарплаты</title>
+  <meta name="description" content="Калькулятор зарплаты КР 2026 — расчёт налогов, взносов и чистой зарплаты">
+  <title>Калькулятор зарплаты КР 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-/* ===== CSS Variables & Reset ===== */
-:root {
-  --bg-primary: #0f1117;
-  --bg-card: #1a1d27;
-  --bg-input: #252836;
-  --bg-table-header: #1e2230;
-  --bg-table-row: #1a1d27;
-  --bg-table-row-alt: #1f2233;
-  --border: #2e3347;
-  --text-primary: #e8eaf0;
-  --text-secondary: #9ba1b7;
-  --text-muted: #6b7290;
-  --accent: #6c5ce7;
-  --accent-hover: #7f71ea;
-  --accent-glow: rgba(108, 92, 231, 0.25);
-  --green: #00cec9;
-  --green-dim: rgba(0, 206, 201, 0.15);
-  --red: #ff6b6b;
-  --red-dim: rgba(255, 107, 107, 0.12);
-  --orange: #fdcb6e;
-  --orange-dim: rgba(253, 203, 110, 0.12);
-  --blue: #74b9ff;
-  --blue-dim: rgba(116, 185, 255, 0.12);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  line-height: 1.6;
-}
-
-/* ===== Container ===== */
-.container {
-  width: 100%;
-  max-width: 680px;
-}
-
-/* ===== Header ===== */
-.header {
-  text-align: center;
-  margin-bottom: 36px;
-}
-
-.header h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 6px;
-}
-
-.header p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-/* ===== Card ===== */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-bottom: 24px;
-  transition: box-shadow var(--transition);
-}
-
-.card:hover {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--text-muted);
-  margin-bottom: 20px;
-}
-
-/* ===== Form fields ===== */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group.full-width {
-  grid-column: 1 / -1;
-}
-
-.form-group label {
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.form-group input,
-.form-group select {
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: var(--text-primary);
-  transition: border-color var(--transition), box-shadow var(--transition);
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.form-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ba1b7' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
-  cursor: pointer;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
-.form-group input::placeholder {
-  color: var(--text-muted);
-}
-
-/* ===== Button ===== */
-.btn-group {
-  justify-content: flex-end;
-}
-
-.btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--accent), #5a4bd1);
-  color: #fff;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px var(--accent-glow);
-}
-
-.btn:active {
-  transform: translateY(0);
-  opacity: 0.9;
-}
-
-/* ===== Results ===== */
-#results {
-  animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Summary cards row */
-.summary-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 24px;
-}
-
-.summary-item {
-  background: var(--bg-input);
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  text-align: center;
-  border: 1px solid var(--border);
-}
-
-.summary-item .label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.summary-item .value {
-  font-size: 1.35rem;
-  font-weight: 700;
-}
-
-.summary-item.netto .value {
-  color: var(--green);
-}
-
-.summary-item.deductions .value {
-  color: var(--red);
-}
-
-.summary-item.fot .value {
-  color: var(--blue);
-}
-
-/* Table */
-.result-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-}
-
-.result-table thead th {
-  background: var(--bg-table-header);
-  padding: 12px 14px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-}
-
-.result-table thead th:last-child {
-  text-align: right;
-}
-
-.result-table thead th:nth-child(2) {
-  text-align: center;
-}
-
-.result-table tbody td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-secondary);
-}
-
-.result-table tbody td:last-child {
-  text-align: right;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.result-table tbody td:nth-child(2) {
-  text-align: center;
-  color: var(--text-muted);
-}
-
-.result-table tbody tr:nth-child(even) {
-  background: var(--bg-table-row-alt);
-}
-
-.result-table tbody tr:hover {
-  background: rgba(108, 92, 231, 0.06);
-}
-
-/* Category separator rows */
-.result-table .section-header td {
-  font-weight: 700;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  padding-top: 18px;
-  border-bottom: none;
-  background: transparent !important;
-}
-
-/* Total rows */
-.result-table .row-total td {
-  font-weight: 700;
-  color: var(--text-primary);
-  border-top: 2px solid var(--border);
-}
-
-.result-table .row-netto td {
-  color: var(--green);
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.result-table .row-fot td {
-  color: var(--blue);
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.result-table .row-deduction td:last-child {
-  color: var(--red);
-}
-
-.result-table .row-employer td:last-child {
-  color: var(--orange);
-}
-
-/* ===== Badge ===== */
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.badge-red {
-  background: var(--red-dim);
-  color: var(--red);
-}
-
-.badge-orange {
-  background: var(--orange-dim);
-  color: var(--orange);
-}
-
-.badge-green {
-  background: var(--green-dim);
-  color: var(--green);
-}
-
-.badge-blue {
-  background: var(--blue-dim);
-  color: var(--blue);
-}
-
-/* ===== Radio Toggle (Gross / Net) ===== */
-.radio-toggle {
-  display: flex;
-  gap: 0;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  margin-bottom: 20px;
-}
-
-.radio-toggle__option {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.radio-toggle__option input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  width: 0;
-  height: 0;
-}
-
-.radio-toggle__option span {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  transition: all var(--transition);
-  user-select: none;
-}
-
-.radio-toggle__option input[type="radio"]:checked+span {
-  background: linear-gradient(135deg, var(--accent), #5a4bd1);
-  color: #fff;
-  box-shadow: 0 2px 8px var(--accent-glow);
-}
-
-.radio-toggle__option:hover span {
-  color: var(--text-primary);
-}
-
-.radio-toggle__option input[type="radio"]:checked+span:hover {
-  color: #fff;
-}
-
-/* ===== Utility: Hidden ===== */
-.hidden {
-  display: none !important;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .summary-row {
-    grid-template-columns: 1fr;
-  }
-
-  .header h1 {
-    font-size: 1.4rem;
-  }
-
-  .card {
-    padding: 20px;
-  }
-}
-
-/* ===== Tooltip for info ===== */
-.info-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--border);
-  color: var(--text-muted);
-  font-size: 0.6rem;
-  font-weight: 700;
-  cursor: help;
-  margin-left: 4px;
-  vertical-align: middle;
-  position: relative;
-}
-
-.info-icon:hover::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 400;
-  white-space: nowrap;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
+    /* ===== CSS Variables & Reset ===== */
+    :root {
+      --bg-primary: #0f1117;
+      --bg-card: #1a1d27;
+      --bg-input: #252836;
+      --bg-table-header: #1e2230;
+      --bg-table-row: #1a1d27;
+      --bg-table-row-alt: #1f2233;
+      --border: #2e3347;
+      --text-primary: #e8eaf0;
+      --text-secondary: #9ba1b7;
+      --text-muted: #6b7290;
+      --accent: #6c5ce7;
+      --accent-hover: #7f71ea;
+      --accent-glow: rgba(108, 92, 231, 0.25);
+      --green: #00cec9;
+      --green-dim: rgba(0, 206, 201, 0.15);
+      --red: #ff6b6b;
+      --red-dim: rgba(255, 107, 107, 0.12);
+      --orange: #fdcb6e;
+      --orange-dim: rgba(253, 203, 110, 0.12);
+      --blue: #74b9ff;
+      --blue-dim: rgba(116, 185, 255, 0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    /* ===== Container ===== */
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ===== Card ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* ===== Form ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .form-group input[type="number"],
+    .form-group select {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ba1b7' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .form-group input[type="number"]:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-group input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ===== Checkbox ===== */
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      user-select: none;
+      padding: 11px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition);
+    }
+
+    .checkbox-label:hover {
+      border-color: var(--accent);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ===== Button ===== */
+    .btn-group {
+      grid-column: 1 / -1;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), #5a4bd1);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+
+    /* ===== Radio Toggle ===== */
+    .radio-toggle {
+      display: flex;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      margin-bottom: 20px;
+    }
+
+    .radio-toggle__option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .radio-toggle__option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-toggle__option span {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--transition);
+      user-select: none;
+    }
+
+    .radio-toggle__option input[type="radio"]:checked + span {
+      background: linear-gradient(135deg, var(--accent), #5a4bd1);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .radio-toggle__option:hover span {
+      color: var(--text-primary);
+    }
+
+    /* ===== Alerts ===== */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .alert-warning {
+      background: var(--orange-dim);
+      border: 1px solid rgba(253, 203, 110, 0.3);
+      color: var(--orange);
+    }
+
+    .alert-info {
+      background: var(--blue-dim);
+      border: 1px solid rgba(116, 185, 255, 0.3);
+      color: var(--blue);
+    }
+
+    /* ===== Results ===== */
+    #results {
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Summary row */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      background: var(--bg-input);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .summary-item .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-item .value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-item.netto .value       { color: var(--green); }
+    .summary-item.deductions .value  { color: var(--red); }
+    .summary-item.fot .value         { color: var(--blue); }
+    .summary-item.gross-calc .value  { color: var(--accent); }
+
+    /* Meta badges row */
+    .meta-card {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Table */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .result-table thead th {
+      background: var(--bg-table-header);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-table thead th:nth-child(2),
+    .result-table thead th:nth-child(3) {
+      text-align: right;
+    }
+
+    .result-table tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .result-table tbody td:nth-child(2),
+    .result-table tbody td:nth-child(3) {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-table tbody td:nth-child(2) {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .result-table tbody tr:nth-child(even) {
+      background: var(--bg-table-row-alt);
+    }
+
+    .result-table tbody tr:hover {
+      background: rgba(108, 92, 231, 0.06);
+    }
+
+    /* Section headers */
+    .result-table .section-header td {
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      padding-top: 18px;
+      border-bottom: none;
+      background: transparent !important;
+    }
+
+    /* Totals */
+    .result-table .row-total td {
+      font-weight: 700;
+      color: var(--text-primary);
+      border-top: 2px solid var(--border);
+    }
+
+    .result-table .row-netto td {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-top: 2px solid var(--border);
+    }
+
+    .result-table .row-fot td {
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-top: 2px solid var(--border);
+    }
+
+    .result-table .row-deduction td:last-child { color: var(--red); }
+    .result-table .row-employer td:last-child   { color: var(--orange); }
+
+    .result-table .row-dim td {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ===== Badge ===== */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-red    { background: var(--red-dim);    color: var(--red); }
+    .badge-orange { background: var(--orange-dim); color: var(--orange); }
+    .badge-green  { background: var(--green-dim);  color: var(--green); }
+    .badge-blue   { background: var(--blue-dim);   color: var(--blue); }
+    .badge-accent { background: var(--accent-glow); color: #a29bfe; }
+
+    /* ===== Info icon tooltip ===== */
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--text-muted);
+      font-size: 0.6rem;
+      font-weight: 700;
+      cursor: help;
+      margin-left: 4px;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    .info-icon:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 400;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* ===== Utility ===== */
+    .hidden { display: none !important; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .btn-group { grid-column: 1; }
+      .header h1 { font-size: 1.4rem; }
+      .card { padding: 20px; }
+      .summary-item .value { font-size: 1.1rem; }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <!-- Header -->
+
     <div class="header">
-      <h1>💰 Калькулятор зарплаты</h1>
-      <p>Расчёт налогов и взносов — Кыргызская Республика</p>
+      <h1>Калькулятор зарплаты</h1>
+      <p>Кыргызская Республика &mdash; 2026 год</p>
     </div>
 
-    <!-- Input Card -->
     <div class="card">
       <div class="card-title">Параметры расчёта</div>
 
-      <!-- Radio toggle: Gross / Net -->
-      <div class="radio-toggle" id="calcModeToggle">
+      <div class="radio-toggle">
         <label class="radio-toggle__option">
           <input type="radio" name="calcMode" value="gross" checked>
-          <span>Гросс зарплата</span>
+          <span>Гросс &rarr; Нетто</span>
         </label>
         <label class="radio-toggle__option">
           <input type="radio" name="calcMode" value="netto">
-          <span>Чистая на руки</span>
+          <span>Нетто &rarr; Гросс</span>
         </label>
       </div>
 
       <form id="salaryForm" class="form-grid" autocomplete="off">
 
-        <!-- Гросс зарплата (visible in gross mode) -->
+        <!-- Сумма -->
         <div class="form-group" id="grossGroup">
           <label for="gross">
             Гросс зарплата (сом)
-            <span class="info-icon" data-tip="Сумма до вычета налогов и взносов">?</span>
+            <span class="info-icon" data-tip="Сумма оклада до вычета налогов">?</span>
           </label>
           <input type="number" id="gross" placeholder="100 000" min="0" step="100">
         </div>
 
-        <!-- На руки (visible in netto mode) -->
         <div class="form-group hidden" id="chistGroup">
           <label for="chist">
-            На руки работника (сом)
-            <span class="info-icon" data-tip="Желаемая сумма после вычета на руки">?</span>
+            На руки — желаемая сумма (сом)
+            <span class="info-icon" data-tip="Сколько работник хочет получить после всех вычетов">?</span>
           </label>
-          <input type="number" id="chist" placeholder="100 000" min="0" step="100">
+          <input type="number" id="chist" placeholder="80 000" min="0" step="100">
         </div>
 
         <!-- Тип работника -->
         <div class="form-group">
-          <label for="workerType">Тип работника</label>
+          <label for="workerType">Категория сотрудника</label>
           <select id="workerType">
-            <option value="regular">Обычный работник</option>
+            <option value="regular">Основной работник</option>
             <option value="pensioner">Пенсионер</option>
-            <option value="foreign">Иностранный работник</option>
+            <option value="foreign">Иностранный гражданин</option>
           </select>
         </div>
 
-        <!-- Бонусы -->
+        <!-- Бонус -->
         <div class="form-group">
           <label for="bonus">
             Бонусы / премии (сом)
-            <span class="info-icon" data-tip="Облагаются так же, как основная зарплата">?</span>
+            <span class="info-icon" data-tip="Облагаются налогами так же, как основная зарплата">?</span>
           </label>
           <input type="number" id="bonus" placeholder="0" min="0" step="100" value="0">
         </div>
 
+        <!-- Регион -->
+        <div class="form-group">
+          <label for="region">Регион работы</label>
+          <select id="region">
+            <option value="bishkek">г. Бишкек</option>
+            <option value="osh_city">г. Ош</option>
+            <option value="chui">Чуйская область</option>
+            <option value="talas">Таласская область</option>
+            <option value="osh_region">Ошская область</option>
+            <option value="naryn">Нарынская область</option>
+            <option value="issyk_kul">Иссык-Кульская область</option>
+            <option value="jalal_abad">Джалал-Абадская область</option>
+            <option value="batken">Баткенская область</option>
+          </select>
+          <div id="smzDisplay" class="field-note"></div>
+        </div>
+
+        <!-- Налоговый режим -->
+        <div class="form-group">
+          <label for="taxRegime">Налоговый режим работодателя</label>
+          <select id="taxRegime">
+            <option value="general">Общий режим / Единый налог (12,25%)</option>
+            <option value="sfit">Спецрежим СФИТ «Тамчы»</option>
+            <option value="football">Организации в сфере футбола</option>
+          </select>
+        </div>
+
+        <!-- Вычет -->
+        <div class="form-group full-width">
+          <label class="checkbox-label">
+            <input type="checkbox" id="useDeduction" checked>
+            Применять стандартный вычет 650 сомов
+          </label>
+        </div>
+
+        <!-- Сертификат иностранца (показывается только для иностранцев) -->
+        <div class="form-group full-width hidden" id="foreignCertGroup">
+          <label class="checkbox-label">
+            <input type="checkbox" id="foreignCert">
+            Есть сертификат об освобождении от страховых взносов
+            <span class="info-icon" data-tip="Иностранец освобождается от ПФ, ГНПФ и взносов работодателя">?</span>
+          </label>
+        </div>
+
         <!-- Кнопка -->
         <div class="form-group btn-group">
-          <button type="submit" class="btn" id="calcBtn">Рассчитать</button>
+          <button type="submit" class="btn">Рассчитать</button>
         </div>
 
       </form>
     </div>
 
-    <!-- Results (hidden until calculated) -->
-    <div id="results" style="display: none;"></div>
+    <div id="results" style="display:none;"></div>
+
   </div>
+
   <script>
-/**
- * ==========================================================================
- *  КАЛЬКУЛЯТОР ЗАРПЛАТЫ — КЫРГЫЗСКАЯ РЕСПУБЛИКА
- *  main.js — Общие утилиты, управление формой и рендеринг результатов
- * ==========================================================================
- */
+    // ===================================================================
+    //  КОНСТАНТЫ 2026
+    // ===================================================================
+    const C = {
+      MZP:        3280,     // Минимальная заработная плата
+      DEDUCTION:  650,      // Стандартный вычет для ПН
+      SF_CAP:     720940,   // Предельная база для страховых взносов (20 × СМЗ)
+    };
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  УТИЛИТЫ
-// ═══════════════════════════════════════════════════════════════════════════
+    const SMZ = {
+      bishkek:    { name: 'г. Бишкек',               value: 44074 },
+      osh_city:   { name: 'г. Ош',                   value: 30039 },
+      chui:       { name: 'Чуйская область',          value: 27819 },
+      talas:      { name: 'Таласская область',        value: 34068 },
+      osh_region: { name: 'Ошская область',           value: 25200 },
+      naryn:      { name: 'Нарынская область',        value: 35205 },
+      issyk_kul:  { name: 'Иссык-Кульская область',  value: 41084 },
+      jalal_abad: { name: 'Джалал-Абадская область', value: 31229 },
+      batken:     { name: 'Баткенская область',       value: 26662 },
+    };
 
-function fmt(n) {
-  return n.toLocaleString('ru-RU');
-}
+    // Базовые ставки по типу работника
+    const BASE_RATES = {
+      regular:   { pf: 0.08, gnpf: 0.02, it: 0.10, empSM: 0.0225 },
+      pensioner: { pf: 0.02, gnpf: 0.00, it: 0.10, empSM: 0.0225 },
+      foreign:   { pf: 0.08, gnpf: 0.02, it: 0.10, empSM: 0.0225 },
+    };
 
-function pct(rate) {
-  const p = rate * 100;
-  return (p % 1 === 0 ? p.toFixed(0) : p.toFixed(2)) + '%';
-}
+    // ===================================================================
+    //  СТАВКИ С УЧЁТОМ РЕЖИМА И ЛЬГОТ
+    // ===================================================================
+    function getRates(workerType, taxRegime, foreignCert) {
+      const r = { ...BASE_RATES[workerType] };
 
-function workerLabel(type) {
-  return {
-    regular: 'Обычный работник',
-    pensioner: 'Пенсионер',
-    foreign: 'Иностранный работник',
-  }[type] || type;
-}
+      // СФИТ «Тамчы» и организации футбола: ПН = 0
+      if (taxRegime === 'sfit' || taxRegime === 'football') {
+        r.it = 0;
+      }
 
-function getRates(workerType) {
-  const rates = {
-    incomeTax: 0.10,
-    pensionFund: 0.08,
-    gnpf: 0.02,
-    employerPension: 0,
-    employerSocMed: 0.0225,
-    personalDeduction: 650
-  };
+      // Иностранец с сертификатом: освобождён от всех страховых взносов
+      if (workerType === 'foreign' && foreignCert) {
+        r.pf    = 0;
+        r.gnpf  = 0;
+        r.empSM = 0;
+      }
 
-  if (workerType === 'pensioner') {
-    rates.pensionFund = 0.02;
-    rates.gnpf = 0;
-  }
+      return r;
+    }
 
-  if (workerType === 'foreign') {
-    rates.employerPension = 0;
-  }
+    // ===================================================================
+    //  РАСЧЁТ: ГРОСС → НЕТТО
+    // ===================================================================
+    function calcFromGross(gross, bonus, workerType, taxRegime, foreignCert, useDeduction) {
+      const rates = getRates(workerType, taxRegime, foreignCert);
+      const ded   = useDeduction ? C.DEDUCTION : 0;
+      const base  = gross + bonus;
 
-  return rates;
-}
+      // Предельная база для страховых взносов (нововведение 2026)
+      const insBase    = Math.min(base, C.SF_CAP);
+      const capApplied = base > C.SF_CAP;
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  УПРАВЛЕНИЕ ФОРМОЙ
-// ═══════════════════════════════════════════════════════════════════════════
+      // Удержания СФ с работника
+      const pfAmt   = Math.round(insBase * rates.pf);
+      const gnpfAmt = Math.round(insBase * rates.gnpf);
 
-const grossGroup = document.getElementById('grossGroup');
-const chistGroup = document.getElementById('chistGroup');
-const grossInput = document.getElementById('gross');
-const chistInput = document.getElementById('chist');
+      // База для ПН = база − ПФ − ГНПФ − вычет
+      let taxBase = base - pfAmt - gnpfAmt - ded;
+      if (taxBase < 0) taxBase = 0;
 
-function getCalcMode() {
-  return document.querySelector('input[name="calcMode"]:checked').value;
-}
+      const itAmt    = Math.round(taxBase * rates.it);
+      const totalDed = pfAmt + gnpfAmt + itAmt;
+      const netto    = base - totalDed;
 
-function updateInputVisibility() {
-  const mode = getCalcMode();
-  if (mode === 'gross') {
-    grossGroup.classList.remove('hidden');
-    chistGroup.classList.add('hidden');
-    grossInput.required = true;
-    chistInput.required = false;
-    chistInput.value = '';
-  } else {
-    grossGroup.classList.add('hidden');
-    chistGroup.classList.remove('hidden');
-    grossInput.required = false;
-    chistInput.required = true;
-    grossInput.value = '';
-  }
+      // Взносы работодателя (тоже с ограниченной базы)
+      const empSMAmt = Math.round(insBase * rates.empSM);
+      const fot      = base + empSMAmt;
 
-  const results = document.getElementById('results');
-  results.style.display = 'none';
-  results.innerHTML = '';
-}
+      return {
+        gross, bonus, base, insBase, capApplied,
+        pfAmt, gnpfAmt, taxBase, itAmt,
+        totalDed, netto, empSMAmt, fot,
+        rates, ded,
+      };
+    }
 
-document.querySelectorAll('input[name="calcMode"]').forEach(function (radio) {
-  radio.addEventListener('change', updateInputVisibility);
-});
+    // ===================================================================
+    //  РАСЧЁТ: НЕТТО → ГРОСС (обратный с ветвлением по лимиту СФ)
+    // ===================================================================
+    function calcFromNetto(desiredNetto, bonus, workerType, taxRegime, foreignCert, useDeduction) {
+      const rates  = getRates(workerType, taxRegime, foreignCert);
+      const ded    = useDeduction ? C.DEDUCTION : 0;
+      const sfRate = rates.pf + rates.gnpf;
+      const itRate = rates.it;
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  ОБРАБОТЧИК ФОРМЫ
-// ═══════════════════════════════════════════════════════════════════════════
+      let base;
 
-document.getElementById('salaryForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  const mode = getCalcMode();
-  if (mode === 'gross') {
-    calculateFromGross();
-  } else {
-    calculateFromNetto();
-  }
-});
+      if (sfRate === 0 && itRate === 0) {
+        // Никаких удержаний (напр. СФИТ + сертификат иностранца)
+        base = desiredNetto;
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  РЕНДЕР РЕЗУЛЬТАТОВ
-// ═══════════════════════════════════════════════════════════════════════════
+      } else if (sfRate === 0) {
+        // Только ПН, без страховых взносов (иностранец с сертификатом)
+        base = (desiredNetto - ded * itRate) / (1 - itRate);
 
-function renderResults(d) {
-  const container = document.getElementById('results');
-  container.style.display = 'block';
+      } else if (itRate === 0) {
+        // Только страховые взносы, ПН = 0 (СФИТ / футбол)
+        base = desiredNetto / (1 - sfRate);
+        if (base > C.SF_CAP) {
+          // Уравнение 2: СФ зафиксирован на лимите
+          base = desiredNetto + C.SF_CAP * sfRate;
+        }
 
-  container.innerHTML = `
-    <!-- Summary cards -->
-    <div class="summary-row">
-      <div class="summary-item netto">
-        <div class="label">Чистая зарплата</div>
-        <div class="value">${fmt(d.netto)}</div>
-      </div>
-      <div class="summary-item deductions">
-        <div class="label">Удержания</div>
-        <div class="value">−${fmt(d.totalDeductions)}</div>
-      </div>
-      <div class="summary-item fot">
-        <div class="label">ФОТ</div>
-        <div class="value">${fmt(d.fot)}</div>
-      </div>
-    </div>
+      } else {
+        // Общий случай
+        // Уравнение 1: База = (Нетто − вычет × ПН) / ((1 − СФ%) × (1 − ПН%))
+        base = (desiredNetto - ded * itRate) / ((1 - sfRate) * (1 - itRate));
 
-    <!-- Detailed table -->
-    <div class="card">
-      <div class="card-title">
-        Детальный расчёт
-        <span class="badge badge-blue" style="margin-left: 8px;">${workerLabel(d.workerType)}</span>
-      </div>
-      <table class="result-table">
-        <thead>
-          <tr>
-            <th>Тип удержания / взноса</th>
-            <th>Ставка</th>
-            <th>Сумма (сом)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- ────── Налогооблагаемая база ────── -->
-          <tr class="section-header"><td colspan="3">Налогооблагаемая база</td></tr>
-          <tr>
-            <td>Гросс + Бонусы</td>
-            <td>—</td>
-            <td>${fmt(d.base)}</td>
-          </tr>
+        if (base > C.SF_CAP) {
+          // Уравнение 2: СФ = фиксированный лимит, формула меняется
+          // Netto = Base × (1 − ПН%) − SF_fixed × (1 − ПН%) + вычет × ПН%
+          // Base  = (Netto − вычет × ПН%) / (1 − ПН%) + SF_fixed
+          const fixedSF = C.SF_CAP * sfRate;
+          base = (desiredNetto - ded * itRate) / (1 - itRate) + fixedSF;
+        }
+      }
 
-          <!-- ────── Удержания работника ────── -->
-          <tr class="section-header"><td colspan="3">Удержания работника</td></tr>
-          <tr class="row-deduction">
-            <td>Пенсионный фонд (ПФ)</td>
-            <td>${pct(d.rates.pensionFund)}</td>
-            <td>−${fmt(d.pensionFundAmount)}</td>
-          </tr>
-          <tr class="row-deduction">
-            <td>ГНПФ (накопительный)</td>
-            <td>${pct(d.rates.gnpf)}</td>
-            <td>−${fmt(d.gnpfAmount)}</td>
-          </tr>
-          ${d.rates.personalDeduction ? `
-          <tr>
-            <td><i>Вычет (Прожиточный минимум)</i></td>
-            <td>—</td>
-            <td style="color: var(--text-muted);"><i>−${fmt(d.rates.personalDeduction)} (не облагается)</i></td>
-          </tr>
-          <tr>
-            <td><i>База для подоходного налога</i></td>
-            <td>—</td>
-            <td style="color: var(--text-muted);">${fmt(d.taxBase)}</td>
-          </tr>
-          ` : ''}
-          <tr class="row-deduction">
-            <td>Подоходный налог (ПН)</td>
-            <td>${pct(d.rates.incomeTax)}</td>
-            <td>−${fmt(d.incomeTaxAmount)}</td>
-          </tr>
-          <tr class="row-total">
-            <td>Всего удержано с работника</td>
-            <td><span class="badge badge-red">${pct(d.totalDeductionPct)}</span></td>
-            <td style="color: var(--red);">−${fmt(d.totalDeductions)}</td>
-          </tr>
+      base = Math.round(base);
+      const gross = Math.max(0, base - bonus);
 
-          <!-- ────── Чистая зарплата ────── -->
-          <tr class="row-netto">
-            <td>✅ Чистая зарплата (нетто)</td>
-            <td></td>
-            <td>${fmt(d.netto)}</td>
-          </tr>
+      return calcFromGross(gross, bonus, workerType, taxRegime, foreignCert, useDeduction);
+    }
 
-          <!-- ────── Взносы работодателя ────── -->
-          <tr class="section-header"><td colspan="3">Взносы работодателя</td></tr>
-          <tr class="row-employer">
-            <td>Пенсионные взносы</td>
-            <td>${pct(d.rates.employerPension)}</td>
-            <td>+${fmt(d.employerPensionAmount)}</td>
-          </tr>
-          <tr class="row-employer">
-            <td>Социальный и медицинский фонд</td>
-            <td>${pct(d.rates.employerSocMed)}</td>
-            <td>+${fmt(d.employerSocMedAmount)}</td>
-          </tr>
-          <tr class="row-total">
-            <td>Всего взносы работодателя</td>
-            <td><span class="badge badge-orange">${pct(d.totalEmployerPct)}</span></td>
-            <td style="color: var(--orange);">+${fmt(d.totalEmployer)}</td>
-          </tr>
+    // ===================================================================
+    //  ФОРМАТИРОВАНИЕ
+    // ===================================================================
+    function fmt(n) {
+      return new Intl.NumberFormat('ru-KG', { maximumFractionDigits: 0 })
+        .format(Math.round(n)) + ' сом';
+    }
 
-          <!-- ────── ФОТ ────── -->
-          <tr class="row-fot">
-            <td>📊 Полный фонд оплаты труда (ФОТ)</td>
-            <td></td>
-            <td>${fmt(d.fot)}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  `;
+    function pct(r) {
+      if (r === 0) return '0%';
+      const v = r * 100;
+      return (Number.isInteger(v) ? v : +v.toFixed(2)) + '%';
+    }
 
-  container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+    // ===================================================================
+    //  РЕНДЕР РЕЗУЛЬТАТОВ
+    // ===================================================================
+    function renderResults(d, { workerType, taxRegime, region, mode }) {
+      const smz = SMZ[region];
 
-/**
- * ==========================================================================
- *  gross.js — Расчёт «от Гросса»
- * ==========================================================================
- */
+      const workerLabels  = {
+        regular:   'Основной работник',
+        pensioner: 'Пенсионер',
+        foreign:   'Иностранный гражданин',
+      };
+      const regimeLabels  = {
+        general:  'Общий режим / Единый налог',
+        sfit:     'СФИТ «Тамчы»',
+        football: 'Сфера футбола',
+      };
 
-function calculateFromGross() {
-    const grossValue = parseFloat(document.getElementById('gross').value) || 0;
-    const bonusValue = parseFloat(document.getElementById('bonus').value) || 0;
-    const workerType = document.getElementById('workerType').value;
+      let html = '';
 
-    const base = grossValue + bonusValue;
-    if (base <= 0) return;
+      // ── Предупреждения ──
+      if (d.gross > 0 && d.gross < C.MZP) {
+        html += `<div class="alert alert-warning">
+          <strong>Внимание:</strong> Заработная плата при полной ставке не может быть ниже МЗП (${fmt(C.MZP)}).
+        </div>`;
+      }
 
-    const rates = getRates(workerType);
+      if (d.capApplied) {
+        html += `<div class="alert alert-info">
+          <strong>Лимит СФ 2026:</strong> База превысила предельную величину (${fmt(C.SF_CAP)}).
+          Страховые взносы рассчитаны с лимитированной суммы.
+        </div>`;
+      }
 
-    const pensionFundAmount = Math.round(base * rates.pensionFund);
-    const gnpfAmount = Math.round(base * rates.gnpf);
+      // ── Итоговые карточки ──
+      html += `<div class="summary-row">`;
+      if (mode === 'netto') {
+        html += `<div class="summary-item gross-calc">
+          <div class="label">Гросс (расчётный)</div>
+          <div class="value">${fmt(d.gross)}</div>
+        </div>`;
+      }
+      html += `
+        <div class="summary-item netto">
+          <div class="label">На руки</div>
+          <div class="value">${fmt(d.netto)}</div>
+        </div>
+        <div class="summary-item deductions">
+          <div class="label">Удержано</div>
+          <div class="value">${fmt(d.totalDed)}</div>
+        </div>
+        <div class="summary-item fot">
+          <div class="label">ФОТ</div>
+          <div class="value">${fmt(d.fot)}</div>
+        </div>
+      </div>`;
 
-    const employeeSocFond = pensionFundAmount + gnpfAmount;
-    let taxBase = base - employeeSocFond - (rates.personalDeduction || 0);
-    if (taxBase < 0) taxBase = 0;
+      // ── Метаданные ──
+      html += `<div class="card meta-card">
+        <span class="badge badge-blue">${workerLabels[workerType]}</span>
+        <span class="badge badge-blue">${regimeLabels[taxRegime]}</span>
+        <span class="badge badge-blue">${smz.name} · СМЗ ${fmt(smz.value)}</span>
+        ${d.ded > 0
+          ? '<span class="badge badge-green">Вычет 650 сом</span>'
+          : '<span class="badge badge-orange">Без вычета</span>'}
+        ${mode === 'netto'
+          ? '<span class="badge badge-accent">Нетто &rarr; Гросс</span>'
+          : '<span class="badge badge-accent">Гросс &rarr; Нетто</span>'}
+      </div>`;
 
-    const incomeTaxAmount = Math.round(taxBase * rates.incomeTax);
+      // ── Детальная таблица ──
+      html += `<div class="card">
+        <div class="card-title">Детальный расчёт</div>
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>Показатель</th>
+              <th>Ставка</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody>`;
 
-    const totalDeductions = incomeTaxAmount + pensionFundAmount + gnpfAmount;
-    const totalDeductionPct = rates.incomeTax + rates.pensionFund + rates.gnpf;
+      // Начисления
+      html += `<tr class="section-header"><td colspan="3">Начисления</td></tr>`;
+      html += `<tr><td>Оклад (гросс)</td><td>&mdash;</td><td>${fmt(d.gross)}</td></tr>`;
 
-    const netto = base - totalDeductions;
+      if (d.bonus > 0) {
+        html += `<tr><td>Бонус / премия</td><td>&mdash;</td><td>+ ${fmt(d.bonus)}</td></tr>`;
+        html += `<tr class="row-total"><td>Итого начислено (база)</td><td>&mdash;</td><td>${fmt(d.base)}</td></tr>`;
+      }
 
-    const employerPensionAmount = Math.round(base * rates.employerPension);
-    const employerSocMedAmount = Math.round(base * rates.employerSocMed);
+      if (d.capApplied) {
+        html += `<tr class="row-dim">
+          <td>База для страховых взносов&nbsp;<span class="badge badge-orange">лимит</span></td>
+          <td>&mdash;</td>
+          <td>${fmt(d.insBase)}</td>
+        </tr>`;
+      }
 
-    const totalEmployer = employerPensionAmount + employerSocMedAmount;
-    const totalEmployerPct = rates.employerPension + rates.employerSocMed;
+      // Удержания с работника
+      html += `<tr class="section-header"><td colspan="3">Удержания с сотрудника</td></tr>`;
 
-    const fot = base + totalEmployer;
+      html += `<tr class="row-deduction">
+        <td>Пенсионный фонд (ПФ)</td>
+        <td>${pct(d.rates.pf)}</td>
+        <td>&minus; ${fmt(d.pfAmt)}</td>
+      </tr>`;
 
-    renderResults({
-        base, workerType, rates, incomeTaxAmount, pensionFundAmount,
-        gnpfAmount, totalDeductions, totalDeductionPct, taxBase, netto,
-        employerPensionAmount, employerSocMedAmount, totalEmployer,
-        totalEmployerPct, fot
+      html += `<tr class="row-deduction">
+        <td>ГНПФ</td>
+        <td>${pct(d.rates.gnpf)}</td>
+        <td>&minus; ${fmt(d.gnpfAmt)}</td>
+      </tr>`;
+
+      const dedNote = d.ded > 0 ? `&nbsp;<span style="font-size:0.75rem;opacity:0.6;">(&minus;&nbsp;650&nbsp;вычет)</span>` : '';
+      html += `<tr class="row-dim">
+        <td>База для ПН${dedNote}</td>
+        <td>&mdash;</td>
+        <td>${fmt(d.taxBase)}</td>
+      </tr>`;
+
+      html += `<tr class="row-deduction">
+        <td>Подоходный налог (ПН)</td>
+        <td>${pct(d.rates.it)}</td>
+        <td>&minus; ${fmt(d.itAmt)}</td>
+      </tr>`;
+
+      const totalPct = d.rates.pf + d.rates.gnpf + d.rates.it;
+      html += `<tr class="row-total">
+        <td>Итого удержано</td>
+        <td>${pct(totalPct)}</td>
+        <td>&minus; ${fmt(d.totalDed)}</td>
+      </tr>`;
+
+      // Нетто
+      html += `<tr class="row-netto">
+        <td>На руки (нетто)</td>
+        <td>&mdash;</td>
+        <td>${fmt(d.netto)}</td>
+      </tr>`;
+
+      // Взносы работодателя
+      html += `<tr class="section-header"><td colspan="3">Взносы работодателя</td></tr>`;
+      html += `<tr class="row-employer">
+        <td>Социальное и медицинское страхование</td>
+        <td>${pct(d.rates.empSM)}</td>
+        <td>+ ${fmt(d.empSMAmt)}</td>
+      </tr>`;
+
+      html += `<tr class="row-fot">
+        <td>ФОТ (полные затраты работодателя)</td>
+        <td>&mdash;</td>
+        <td>${fmt(d.fot)}</td>
+      </tr>`;
+
+      html += `</tbody></table></div>`;
+
+      return html;
+    }
+
+    // ===================================================================
+    //  UI — ОБРАБОТЧИКИ СОБЫТИЙ
+    // ===================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      const modeRadios      = document.querySelectorAll('input[name="calcMode"]');
+      const grossGroup      = document.getElementById('grossGroup');
+      const chistGroup      = document.getElementById('chistGroup');
+      const workerTypeEl    = document.getElementById('workerType');
+      const foreignCertGroup= document.getElementById('foreignCertGroup');
+      const regionEl        = document.getElementById('region');
+      const smzDisplay      = document.getElementById('smzDisplay');
+      const form            = document.getElementById('salaryForm');
+      const resultsDiv      = document.getElementById('results');
+
+      function updateMode() {
+        const isGross = document.querySelector('input[name="calcMode"]:checked').value === 'gross';
+        grossGroup.classList.toggle('hidden', !isGross);
+        chistGroup.classList.toggle('hidden',  isGross);
+      }
+
+      function updateForeignCert() {
+        foreignCertGroup.classList.toggle('hidden', workerTypeEl.value !== 'foreign');
+      }
+
+      function updateSMZ() {
+        const smz = SMZ[regionEl.value];
+        smzDisplay.textContent = `СМЗ: ${fmt(smz.value)}`;
+      }
+
+      modeRadios.forEach(r  => r.addEventListener('change', updateMode));
+      workerTypeEl.addEventListener('change', updateForeignCert);
+      regionEl.addEventListener('change', updateSMZ);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const mode        = document.querySelector('input[name="calcMode"]:checked').value;
+        const workerType  = workerTypeEl.value;
+        const taxRegime   = document.getElementById('taxRegime').value;
+        const region      = regionEl.value;
+        const bonus       = parseFloat(document.getElementById('bonus').value) || 0;
+        const useDeduction= document.getElementById('useDeduction').checked;
+        const foreignCert = workerType === 'foreign'
+                            && document.getElementById('foreignCert').checked;
+
+        let result;
+
+        if (mode === 'gross') {
+          const gross = parseFloat(document.getElementById('gross').value) || 0;
+          result = calcFromGross(gross, bonus, workerType, taxRegime, foreignCert, useDeduction);
+        } else {
+          const netto = parseFloat(document.getElementById('chist').value) || 0;
+          result = calcFromNetto(netto, bonus, workerType, taxRegime, foreignCert, useDeduction);
+        }
+
+        resultsDiv.innerHTML = renderResults(result, { workerType, taxRegime, region, mode });
+        resultsDiv.style.display = 'block';
+
+        // Небольшая задержка для анимации
+        setTimeout(() => {
+          resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+      });
+
+      // Инициализация
+      updateMode();
+      updateForeignCert();
+      updateSMZ();
     });
-}
-
-/**
- * ==========================================================================
- *  chist.js — Расчёт «от Чистой зарплаты»
- * ==========================================================================
- */
-
-function calculateFromNetto() {
-    const desiredNetto = parseFloat(document.getElementById('chist').value) || 0;
-    const bonusValue = parseFloat(document.getElementById('bonus').value) || 0;
-    const workerType = document.getElementById('workerType').value;
-
-    if (desiredNetto <= 0) return;
-
-    const rates = getRates(workerType);
-
-    const SF_rate = rates.pensionFund + rates.gnpf;
-    const IT_rate = rates.incomeTax;
-    const deduction = rates.personalDeduction || 0;
-
-    let base = (desiredNetto - deduction * IT_rate) / ((1 - SF_rate) * (1 - IT_rate));
-    base = Math.round(base);
-
-    if (base <= 0) return;
-
-    const grossValue = base - bonusValue;
-
-    const pensionFundAmount = Math.round(base * rates.pensionFund);
-    const gnpfAmount = Math.round(base * rates.gnpf);
-    const employeeSocFond = pensionFundAmount + gnpfAmount;
-
-    let taxBase = base - employeeSocFond - deduction;
-    if (taxBase < 0) taxBase = 0;
-
-    const incomeTaxAmount = Math.round(taxBase * IT_rate);
-
-    const totalDeductions = incomeTaxAmount + pensionFundAmount + gnpfAmount;
-    const totalDeductionPct = rates.incomeTax + rates.pensionFund + rates.gnpf;
-
-    const netto = base - totalDeductions;
-
-    const employerPensionAmount = Math.round(base * rates.employerPension);
-    const employerSocMedAmount = Math.round(base * rates.employerSocMed);
-
-    const totalEmployer = employerPensionAmount + employerSocMedAmount;
-    const totalEmployerPct = rates.employerPension + rates.employerSocMed;
-
-    const fot = base + totalEmployer;
-
-    renderResults({
-        base, workerType, rates, incomeTaxAmount, pensionFundAmount,
-        gnpfAmount, totalDeductions, totalDeductionPct, taxBase, netto,
-        employerPensionAmount, employerSocMedAmount, totalEmployer,
-        totalEmployerPct, fot
-    });
-}
   </script>
-</body>
 
+</body>
 </html>
